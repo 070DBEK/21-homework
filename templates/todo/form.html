@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Todo{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6 text-center">Add New Todo</h1>
+<form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    {% csrf_token %}
+
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Title</label>
+        {{ form.title }}
+        {% if form.title.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.title.errors.0 }}</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="desc">Description</label>
+        {{ form.desc }}
+        {% if form.desc.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.desc.errors.0 }}</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="priority">Priority</label>
+        {{ form.priority }}
+        {% if form.priority.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.priority.errors.0 }}</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="status">Status</label>
+        {{ form.status }}
+        {% if form.status.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.status.errors.0 }}</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="due_date">Due Date</label>
+        {{ form.due_date }}
+        {% if form.due_date.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.due_date.errors.0 }}</p>
+        {% endif %}
+    </div>
+
+    <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Add Todo
+        </button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6 text-center">Todo List</h1>
+
+<!-- Search and Filter Form -->
+<form class="mb-6 bg-white shadow-md rounded px-8 pt-6 pb-8" method="get">
+    <div class="mb-4">
+        <input type="text" name="search" value="{{ request.GET.search }}" placeholder="Search todos" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    <div class="flex flex-wrap -mx-2 mb-4">
+        <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
+            <select name="priority" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">All Priorities</option>
+                <option value="high" {% if request.GET.priority == 'high' %}selected{% endif %}>High</option>
+                <option value="medium" {% if request.GET.priority == 'medium' %}selected{% endif %}>Medium</option>
+                <option value="low" {% if request.GET.priority == 'low' %}selected{% endif %}>Low</option>
+            </select>
+        </div>
+        <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
+            <select name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">All Statuses</option>
+                <option value="active" {% if request.GET.status == 'Active' %}selected{% endif %}>Active</option>
+                <option value="completed" {% if request.GET.status == 'Completed' %}selected{% endif %}>Completed</option>
+            </select>
+        </div>
+        <div class="w-full md:w-1/3 px-2">
+            <select name="order_by" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Order By</option>
+                <option value="due_date" {% if request.GET.order_by == 'due_date' %}selected{% endif %}>Due Date</option>
+                <option value="priority" {% if request.GET.order_by == 'priority' %}selected{% endif %}>Priority</option>
+                <option value="status" {% if request.GET.order_by == 'status' %}selected{% endif %}>Status</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex items-center justify-between">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Apply Filters
+        </button>
+        <button type="reset" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Reset Filters
+        </button>
+    </div>
+</form>
+
+<!-- Todo List -->
+<ul class="mb-6">
+    {% for task in tasks %}
+    <li class="bg-white shadow-md rounded px-8 py-6 mb-4 flex items-center">
+        <input type="checkbox" class="mr-4" {% if task.status == 'Completed' %}checked{% endif %}>
+        <div class="flex-grow">
+            {% if task.status != 'Completed' %}
+            <a href="{% url 'tasks:detail' task.pk %}" class="text-lg font-semibold hover:text-blue-600 {% if task.status == 'completed' %}line-through text-gray-500{% endif %}">
+                {{ task.title }}
+            </a>
+            {% else %}
+            <a href="{% url 'tasks:detail' task.pk %}" class="text-lg font-semibold line-through hover:text-blue-600">
+                {{ task.title }}
+            </a>
+            {% endif %}
+            <p class="text-gray-600">Due: {{ task.due_date }}</p>
+        </div>
+        <span class="inline-block bg-{{ task.priority_color }}-200 rounded-full px-3 py-1 text-sm font-semibold text-{{ task.priority_color }}-700 mr-2">{{ task.get_priority_display }}</span>
+        <a href="{% url 'tasks:update' task.pk %}" class="text-blue-500 hover:text-blue-700 mr-2">
+            <i class="bi bi-pencil"></i>
+        </a>
+        <a href="{% url 'tasks:delete' task.pk %}" class="text-red-500 hover:text-red-700">
+            <i class="bi bi-trash"></i>
+        </a>
+    </li>
+    {% empty %}
+    <li class="bg-white shadow-md rounded px-8 py-6 mb-4">No tasks available.</li>
+    {% endfor %}
+</ul>
+
+<!-- Add New Todo Button -->
+<a href="{% url 'tasks:create' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+    <i class="bi bi-plus-circle mr-2"></i>Add New Todo
+</a>
+
+{% endblock %}

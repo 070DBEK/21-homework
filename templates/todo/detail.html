@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Todo Detail{% endblock %}
+
+{% block content %}
+
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <!-- Back button -->
+    <a href="{% url 'tasks:list' %}" class="inline-block mb-4 text-blue-500 hover:text-blue-700">
+        <i class="bi bi-arrow-left mr-2"></i>Back to Todo List
+    </a>
+
+    <h1 class="text-3xl font-bold mb-6">Todo Detail</h1>
+
+    <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+            <h2 class="text-2xl font-semibold">{{ task.title }}</h2> <!-- Changed from task.name to task.title -->
+            <div class="flex items-center">
+                <input type="checkbox" id="todo-status" class="mr-2" {% if task.status == 'Completed' %}checked{% endif %}> <!-- Changed 'completed' to 'Completed' -->
+                <label for="todo-status" class="text-sm text-gray-600">Mark as completed</label>
+            </div>
+        </div>
+        <p class="text-gray-700 mb-2">{{ task.desc }}</p> <!-- Changed from task.description to task.desc -->
+        <p class="text-gray-600">Due: {{ task.due_date }}</p>
+    </div>
+
+    <div class="mb-6">
+        <span class="inline-block bg-{{ task.priority|lower }}-200 rounded-full px-3 py-1 text-sm font-semibold text-{{ task.priority|lower }}-700 mr-2">{{ task.get_priority_display }}</span>
+        <span class="inline-block bg-{{ task.status|lower }}-200 rounded-full px-3 py-1 text-sm font-semibold text-{{ task.status|lower }}-700">{{ task.get_status_display }}</span>
+    </div>
+
+    <div class="flex items-center justify-between">
+        <a href="{% url 'tasks:update' task.pk %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <i class="bi bi-pencil mr-2"></i>Edit
+        </a>
+        <a href="{% url 'tasks:delete' task.pk %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            <i class="bi bi-trash mr-2"></i>Delete
+        </a>
+    </div>
+</div>
+
+{% endblock %}
